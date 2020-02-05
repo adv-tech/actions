@@ -1,0 +1,19 @@
+name: PowerShell Publisher
+description: Publish a PowerShell script or module to a repository
+inputs:
+  entrypoint:
+    description: Path to the .ps1, .psd1, or .psm1 file.
+    required: true
+  repository:
+    description: Uri of the repository
+    required: true
+  apikey:
+    description: API key for the repository; typically ${{ secrets.RepoKey }}
+    required: true
+runs:
+  using: "docker"
+  image: Dockerfile
+  args:
+  - ${{ inputs.entrypoint }}
+  - ${{ inputs.repository }}
+  - ${{ inputs.apikey }}
