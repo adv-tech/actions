@@ -4,8 +4,11 @@ inputs:
   entrypoint:
     description: Path to the .ps1, .psd1, or .psm1 file.
     required: true
-  repository:
-    description: Uri of the repository
+  repoModule:
+    description: Uri to the modules feed of the repository.
+    required: true
+  repoScript:
+    description: Uri to the scripts feed of the repository.
     required: true
   apikey:
     description: API key for the repository; typically ${{ secrets.RepoKey }}
@@ -15,5 +18,6 @@ runs:
   image: Dockerfile
   args:
   - ${{ inputs.entrypoint }}
-  - ${{ inputs.repository }}
+  - ${{ inputs.repoModule }}
+  - ${{ inputs.repoScript }}
   - ${{ inputs.apikey }}

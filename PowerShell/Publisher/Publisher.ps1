@@ -1,18 +1,29 @@
-Import-Module PowerShellGet
+Write-Host "Import PowerShellGet"
+Import-Module PowerShellGet -ErrorAction Stop
+
+Write-Host "Register repository"
 $repo = @{
-  Name = 'TargetRepo'
-  SourceLocation = ${env:repository}
-  PublishLocation = ${env:repository}
-  InstallationPolicy = 'Trusted'
+  Name                  =  'TargetRepo'
+  SourceLocation        =  ${env:repoModule}
+  PublishLocation       =  ${env:repoModule}
+  ScriptSourceLocation  =  ${env:repoScript}
+  ScriptPublishLocation =  ${env:repoScript}
+  InstallationPolicy    =  'Trusted'
 }
-Register-PSRepository @repo
+Register-PSRepository @repo -ErrorAction Stop
+
 $version = ${env:GITHUB_REF} -replace 'refs\/tags\/', ''
+Write-Host "Release version: $version"
+
 if (${env:entrypoint} -match ".ps1$") {
-  Update-ScriptFileInfo ${env:entrypoint} -Version $version
+  Write-Host "Update script info"
+  Update-ScriptFileInfo ${env:entrypoint} -Version $version -ErrorAction Stop
+  Write-Host "Publish script"
+  Publish-Script -Path ${env:entrypoint} -Repository TargetRepo -NuGetApiKey ${env:apikey} -ErrorAction Stop
 }
 else {
-  if (${env:entrypoint} -match ".psd1$") {
-    Update-ModuleManifest ${env:entrypoint} -ModuleVersion $version
-  }
-  Publish-Module ${env:entrypoint} -repository TargetRepo -ApiKey ${env:apikey}
+  Write-Host "Update module manifest"
+  Update-ModuleManifest ${env:entrypoint} -ModuleVersion $version -ErrorAction Stop
+  Write-Host "Publish module"
+  Publish-Module -Path ${env:entrypoint}.SubString(0, ${env:entrypoint}.lastIndexOf('/')+1) -Repository TargetRepo -NuGetApiKey ${env:apikey} -ErrorAction Stop
 }
