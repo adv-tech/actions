@@ -7,7 +7,7 @@ inputs:
   TargetRepoUri:
     description: Uri to the modules feed of the repository.
     required: true
-  apikey:
+  NuGetApiToken:
     description: API key for the repository; typically ${{ secrets.RepoKey }}
     required: true
   Token:
@@ -19,5 +19,5 @@ runs:
   env:
     Package: ${{ inputs.entrypoint }}
     TargetRepoUri: ${{ inputs.TargetRepoUri }}
-    NugetApiKey: ${{ inputs.apikey }}
+    NugetApiKey: ${{ inputs.NuGetApiToken }}
     GitHub_Token: ${{ inputs.Token }}
