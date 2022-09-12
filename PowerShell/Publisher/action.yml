@@ -4,20 +4,20 @@ inputs:
   entrypoint:
     description: Path to the .ps1, .psd1, or .psm1 file.
     required: true
-  repoModule:
+  TargetRepoUri:
     description: Uri to the modules feed of the repository.
-    required: true
-  repoScript:
-    description: Uri to the scripts feed of the repository.
     required: true
   apikey:
     description: API key for the repository; typically ${{ secrets.RepoKey }}
     required: true
+  Token:
+    description: GitHub Token with access to this repo
+    required: True
 runs:
   using: "docker"
   image: Dockerfile
-  args:
-  - ${{ inputs.entrypoint }}
-  - ${{ inputs.repoModule }}
-  - ${{ inputs.repoScript }}
-  - ${{ inputs.apikey }}
+  env:
+    Package: ${{ inputs.entrypoint }}
+    TargetRepoUri: ${{ inputs.TargetRepoUri }}
+    NugetApiKey: ${{ inputs.apikey }}
+    GitHub_Token: ${{ inputs.Token }}
