@@ -8,7 +8,7 @@ inputs:
     description: Uri to the modules feed of the repository.
     required: true
   NuGetApiToken:
-    description: API key for the repository; typically ${{ secrets.RepoKey }}
+    description: API key for the repository
     required: true
   Token:
     description: GitHub Token with access to this repo
