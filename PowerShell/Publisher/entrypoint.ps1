@@ -86,14 +86,13 @@ if (${env:Package} -match ".ps1$") {
   Publish-Script -Path ${env:Package} -Repository TargetRepo -NuGetApiKey $NuGetApiKey
 }
 else {
-  Test-ModuleManifest ${env:Package}
   Write-Host "Update module manifest"
   if ($release.prerelease) {
     $tag = $tag.Split("-")
     Update-ModuleManifest ${env:Package} -ModuleVersion $tag[0] -ReleaseNotes $release.body -Prerelease $tag[1].Replace(".","")
   }
   else {
-    Update-ModuleManifest ${env:Package} -ModuleVersion $tag -ReleaseNotes $release.body
+    Update-ModuleManifest ${env:Package} -ModuleVersion $tag -ReleaseNotes $release.body -ErrorAction Ignore
   }
   # if ($certificate) {
   #   Write-Host "Sign module"
