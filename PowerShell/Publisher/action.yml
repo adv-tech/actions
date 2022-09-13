@@ -1,7 +1,7 @@
 name: PowerShell Publisher
 description: Publish a PowerShell script or module to a repository
 inputs:
-  entrypoint:
+  Package:
     description: Path to the .ps1, .psd1, or .psm1 file.
     required: true
   TargetRepoUri:
@@ -17,7 +17,7 @@ runs:
   using: "docker"
   image: Dockerfile
   env:
-    Package: ${{ inputs.entrypoint }}
+    Package: ${{ inputs.Package }}
     TargetRepoUri: ${{ inputs.TargetRepoUri }}
     NugetApiKey: ${{ inputs.NuGetApiToken }}
     GitHub_Token: ${{ inputs.Token }}
