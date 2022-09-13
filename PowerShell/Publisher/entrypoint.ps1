@@ -86,6 +86,8 @@ if (${env:Package} -match ".ps1$") {
   Publish-Script -Path ${env:Package} -Repository TargetRepo -NuGetApiKey $NuGetApiKey
 }
 else {
+  Write-Host "Get required dependencies"
+  (Test-ModuleManifest ${env:Package} -ErrorAction Ignore).RequiredModules | % {Install-Module -Name $_.Name -Repository TargetRepo}
   Write-Host "Update module manifest"
   if ($release.prerelease) {
     $tag = $tag.Split("-")
