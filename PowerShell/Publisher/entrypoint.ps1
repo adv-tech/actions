@@ -67,6 +67,8 @@ $headers = @{
 }
 $release = Invoke-RestMethod -Uri $uriRelease -Headers $headers | ConvertTo-Json | ConvertFrom-Json
 
+$release
+
 if (${env:Package} -match ".ps1$") {
   Write-Host "Update script info"
   if ($release.prerelease) {
@@ -84,6 +86,7 @@ if (${env:Package} -match ".ps1$") {
   Publish-Script -Path ${env:Package} -Repository TargetRepo -NuGetApiKey $NuGetApiKey
 }
 else {
+  Test-ModuleManifest ${env:Package}
   Write-Host "Update module manifest"
   if ($release.prerelease) {
     $tag = $tag.Split("-")
