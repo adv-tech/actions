@@ -51,7 +51,7 @@ $repo = @{
   ScriptPublishlocation =  ${env:TargetRepoUri}
   InstallationPolicy    =  'Trusted'
 }
-$tag = ${env:ReleaseTag}
+$tag = ${env:GITHUB_REF}
 Register-PSRepository @repo 
 if ($tag -match "refs/tags/") {
   $tag = $tag.Substring($tag.lastIndexOf('/')+1)
