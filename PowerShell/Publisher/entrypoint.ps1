@@ -107,5 +107,6 @@ else {
   #   }
   # }
   Write-Host "Publish module"
+  Write-Host "Path: ${env:Package}.SubString(0, ${env:Package}.lastIndexOf('\')+1)"
   Publish-Module -Path ${env:Package}.SubString(0, ${env:Package}.lastIndexOf('\')+1) -Repository TargetRepo -NuGetApiKey $NuGetApiKey
 }
