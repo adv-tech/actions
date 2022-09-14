@@ -91,7 +91,7 @@ else {
   Write-Host "Update module manifest"
   if ($release.prerelease) {
     $tag = $tag.Split("-")
-    Update-ModuleManifest ${env:Package} -ModuleVersion $tag[0] -ReleaseNotes $release.body -Prerelease $tag[1].Replace(".","")
+    Update-ModuleManifest ${env:Package} -ModuleVersion $tag -ReleaseNotes $release.body -Prerelease $release.id
   }
   else {
     Update-ModuleManifest ${env:Package} -ModuleVersion $tag -ReleaseNotes $release.body -ErrorAction Ignore
