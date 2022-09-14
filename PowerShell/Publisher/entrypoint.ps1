@@ -83,7 +83,7 @@ if (${env:Package} -match ".ps1$") {
   #   Set-SignatureHelper -FilePath ${env:Package} -Certificate $cert
   # }
   Write-Host "Publish script"
-  Publish-Script -Path ${env:Package} -Repository TargetRepo -NuGetApiKey $NuGetApiKey
+  Publish-Script -Path ${env:Package} -Repository TargetRepo -NuGetApiKey ${env:NugetApiKey}
 }
 else {
   Write-Host "Get required dependencies"
@@ -107,5 +107,5 @@ else {
   #   }
   # }
   Write-Host "Publish module"
-  Publish-Module -Path ${env:Package}.SubString(0, ${env:Package}.lastIndexOf('/')+1) -Repository TargetRepo -NuGetApiKey $NuGetApiKey
+  Publish-Module -Path ${env:Package}.SubString(0, ${env:Package}.lastIndexOf('/')+1) -Repository TargetRepo -NuGetApiKey ${env:NugetApiKey}
 }
