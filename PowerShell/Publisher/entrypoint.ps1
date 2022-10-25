@@ -73,17 +73,19 @@ if (${env:Package} -match ".ps1$") {
   Write-Host "Update script info"
   if ($release.prerelease) {
     Update-ScriptFileInfo ${env:Package} -Version $tag -ReleaseNotes $release.body
+    Write-Host "Do not publish pre-release versions of scripts" #This is because our NuGet repository does not support pre-release for scripts. We still want to run the publisher script to gather metadata and allow the release to have the finished version in a subsequent step.
   }
   else {
     Update-ScriptFileInfo ${env:Package} -Version $tag -ReleaseNotes $release.body
+    Write-Host "Publish script"
+    Publish-Script -Path ${env:Package} -Repository TargetRepo -NuGetApiKey ${env:NugetApiKey}
+
   }
   # if (${env:certificate}) {
   #   Write-Host "Sign script"
   #   $cert = Get-CodeSigningCert -certificate ${env:certificate} -certificatePassword (ConvertTo-SecureString ${env:certificatePassword} -AsPlainText -Force)
   #   Set-SignatureHelper -FilePath ${env:Package} -Certificate $cert
   # }
-  Write-Host "Publish script"
-  Publish-Script -Path ${env:Package} -Repository TargetRepo -NuGetApiKey ${env:NugetApiKey}
 }
 else {
   Write-Host "Get required dependencies"
