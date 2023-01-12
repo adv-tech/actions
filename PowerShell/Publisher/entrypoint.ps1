@@ -87,11 +87,18 @@ if (${env:Package} -match ".ps1$") {
   # }
 }
 else {
+  Write-Host "Build Publish Command"
+  $Module = @{
+    Path = ${env:Package}.SubString(0, ${env:Package}.lastIndexOf('/')+1)
+    Repository = "TargetRepo"
+    NuGetAPIKey = ${env:NugetApiKey}
+  }
   Write-Host "Get required dependencies"
   (Test-ModuleManifest ${env:Package} -ErrorAction Ignore).RequiredModules | % {Install-Module -Name $_.Name -Repository TargetRepo}
   Write-Host "Update module manifest"
   if ($release.prerelease) {
     Update-ModuleManifest ${env:Package} -ModuleVersion $tag -ReleaseNotes $release.body -Prerelease $release.id
+    $Module += @{AllowPrerelease = $True}
   }
   else {
     Update-ModuleManifest ${env:Package} -ModuleVersion $tag -ReleaseNotes $release.body -ErrorAction Ignore
@@ -107,5 +114,5 @@ else {
   #   }
   # }
   Write-Host "Publish module"
-  Publish-Module -Path ${env:Package}.SubString(0, ${env:Package}.lastIndexOf('/')+1) -Repository TargetRepo -NuGetApiKey ${env:NugetApiKey}
+  Publish-Module @Module #-Path ${env:Package}.SubString(0, ${env:Package}.lastIndexOf('/')+1) -Repository TargetRepo -NuGetApiKey ${env:NugetApiKey}
 }
