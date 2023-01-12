@@ -87,7 +87,7 @@ if (${env:Package} -match ".ps1$") {
   # }
 }
 else {
-  Write-Host "Build Publish Command"
+  Write-Host "Build publish parameters"
   $Module = @{
     Path = ${env:Package}.SubString(0, ${env:Package}.lastIndexOf('/')+1)
     Repository = "TargetRepo"
@@ -113,6 +113,6 @@ else {
   #     Set-SignatureHelper -FilePath $ModuleFile -Certificate $cert
   #   }
   # }
-  Write-Host "Publish module"
+  Write-Host "Publish module with parameters: $Module"
   Publish-Module @Module #-Path ${env:Package}.SubString(0, ${env:Package}.lastIndexOf('/')+1) -Repository TargetRepo -NuGetApiKey ${env:NugetApiKey}
 }
