@@ -71,12 +71,11 @@ $release
 
 if (${env:Package} -match ".ps1$") {
   Write-Host "Update script info"
+  Update-ScriptFileInfo ${env:Package} -Version $tag -ReleaseNotes $release.body
   if ($release.prerelease) {
-    Update-ScriptFileInfo ${env:Package} -Version $tag -ReleaseNotes $release.body
     Write-Host "Do not publish pre-release versions of scripts" #This is because our NuGet repository does not support pre-release for scripts. We still want to run the publisher script to gather metadata and allow the release to have the finished version in a subsequent step.
   }
   else {
-    Update-ScriptFileInfo ${env:Package} -Version $tag -ReleaseNotes $release.body
     Write-Host "Publish script"
     Publish-Script -Path ${env:Package} -Repository TargetRepo -NuGetApiKey ${env:NugetApiKey}
 
@@ -92,7 +91,6 @@ else {
   (Test-ModuleManifest ${env:Package} -ErrorAction Ignore).RequiredModules | % {Install-Module -Name $_.Name -Repository TargetRepo}
   Write-Host "Update module manifest"
   if ($release.prerelease) {
-    $tag = $tag.Split("-")
     Update-ModuleManifest ${env:Package} -ModuleVersion $tag -ReleaseNotes $release.body -Prerelease $release.id
   }
   else {
